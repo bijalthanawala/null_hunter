@@ -45,7 +45,7 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
 }
 
 void util_print_null_stats(P_NULL_STATS p_stats) {
-    printf("pstats @ %p:\n", p_stats);
+    printf("pstats @ %p:\n", (void *)p_stats);
     printf("total_null_count = %d\n", p_stats->total_null_count);
     printf("null_segments = %d\n", p_stats->null_segments);
     printf("max_segment_size = %d\n", p_stats->max_segment_size);

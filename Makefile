@@ -1,17 +1,17 @@
 null_hunter: null_hunter.o main.o
 	gcc -o null_hunter null_hunter.o main.o
 
-null_hunter.o: null_hunter.c
-	gcc -c -o null_hunter.o null_hunter.c
-
-main.o: main.c
-	gcc -c -o main.o main.c
-
-test_null_hunter.o: test_null_hunter.c
-	gcc -c -o test_null_hunter.o test_null_hunter.c
-
 test_null_hunter: null_hunter.o test_null_hunter.o
 	gcc -o test_null_hunter null_hunter.o test_null_hunter.o -lcunit
+
+null_hunter.o: null_hunter.c
+	gcc -Wpedantic -std=c2x -c -o null_hunter.o null_hunter.c
+
+main.o: main.c
+	gcc -Wpedantic -std=c2x -c -o main.o main.c
+
+test_null_hunter.o: test_null_hunter.c
+	gcc -Wpedantic -std=c2x -c -o test_null_hunter.o test_null_hunter.c
 
 all: null_hunter test_null_hunter
 
