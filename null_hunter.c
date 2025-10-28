@@ -12,14 +12,15 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
         return NH_ERROR_NULL_STAT_POINTER;
     }
 
-    p_null_stats->null_segments = 0;
-    p_null_stats->total_null_count = 0;
+    // Don't assume that caller has initialized the stats
+    memset(p_null_stats, 0, sizeof(NULL_STATS));
 
     while(ch != -1) {
         ch = fgetc(fp);
 
-        if(ch == 0)
+        if(ch == 0) {
             p_null_stats->null_segments++;
+        }
 
         while(ch == 0) {
             p_null_stats->total_null_count++;

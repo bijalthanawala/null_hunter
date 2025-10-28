@@ -5,7 +5,7 @@ int main(int argc, char **argv) {
 
     NH_STATUS status = NH_SUCCESS;
     FILE *fp = NULL;
-    NULL_STATS null_stats = {0};
+    NULL_STATS null_stats = {};
 
     if(argc < 2) {
         printf("Please specify the file to look NULL into!\n");
