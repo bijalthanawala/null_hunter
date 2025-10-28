@@ -2,11 +2,18 @@
 
 #define NULL_HUNTER_H
 
+typedef enum {
+    NH_SUCCESS,
+    NH_ERROR_NULL_FILE_POINTER,
+    NH_ERROR_NULL_STAT_POINTER,
+    NH_UNKNOWN_ERROR
+} NH_STATUS;
+
 typedef struct null_stats {
     int total_null_count;
     int null_segments;
 } NULL_STATS, *P_NULL_STATS;
 
-void count_null(FILE* fp, P_NULL_STATS p_null_stats);
+NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats);
 
 #endif

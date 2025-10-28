@@ -3,6 +3,7 @@
 
 int main(int argc, char **argv) {
 
+    NH_STATUS status = NH_SUCCESS;
     FILE *fp = NULL;
     NULL_STATS null_stats = {0};
 
@@ -13,12 +14,17 @@ int main(int argc, char **argv) {
 
     printf("Scanning file %s\n", argv[1]);
     fp = fopen(argv[1], "rb");
-    count_null(fp, &null_stats);
+    status = null_hunter(fp, &null_stats);
+
+    if(status != NH_SUCCESS) {
+        printf("Error encountered while counting. Error code=%d\n", status);
+        return status;
+    }
 
     printf("Found total %d NULL characters in %d segments\n",
         null_stats.total_null_count,
         null_stats.null_segments
     );
 
-    return 0;
+    return status;
 }
