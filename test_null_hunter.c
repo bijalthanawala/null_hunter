@@ -222,21 +222,19 @@ int main()
 {
     CU_initialize_registry();
 
-    CU_pSuite null_hunter_tests = CU_add_suite("null_hunter_file_test_suite", NULL, NULL);
-    CU_add_test(null_hunter_tests, "NULL file pointer", test_null_fp);
-    CU_add_test(null_hunter_tests, "NULL stats pointer", test_null_stats);
-    CU_add_test(null_hunter_tests, "test_zero_length_file", test_zero_length_file);
-    CU_add_test(null_hunter_tests, "test_no_null_file_size_one", test_no_null_file_size_one);
-    CU_add_test(null_hunter_tests, "test_no_null_file_size_five", test_no_null_file_size_five);
-    CU_add_test(null_hunter_tests, "test_one_null_file_size_one", test_one_null_file_size_one);
-
-    CU_add_test(null_hunter_tests, "test_nulls_in_the_beginning", test_nulls_in_the_beginning);
-    CU_add_test(null_hunter_tests, "test_nulls_in_the_end", test_nulls_in_the_end);
-
-    CU_add_test(null_hunter_tests, "test_five_null_one_segment_only_in_file", test_five_null_one_segment_only_in_file);
-    CU_add_test(null_hunter_tests, "test_five_null_one_segment_followed_by_one_nonnull", test_five_null_one_segment_followed_by_one_nonnull);
-    CU_add_test(null_hunter_tests, "test_two_nulls_two_segments_both_segments_at_each_end", test_two_nulls_two_segments_both_segments_at_each_end);
-    CU_add_test(null_hunter_tests, "test_two_segments_both_segments_in_between", test_two_segments_both_segments_in_between);
+    CU_pSuite nh_test_suite = CU_add_suite("null_hunter_file_test_suite", NULL, NULL);
+    CU_ADD_TEST(nh_test_suite, test_null_fp);
+    CU_ADD_TEST(nh_test_suite, test_null_stats);
+    CU_ADD_TEST(nh_test_suite, test_zero_length_file);
+    CU_ADD_TEST(nh_test_suite, test_no_null_file_size_one);
+    CU_ADD_TEST(nh_test_suite, test_no_null_file_size_five);
+    CU_ADD_TEST(nh_test_suite, test_one_null_file_size_one);
+    CU_ADD_TEST(nh_test_suite, test_nulls_in_the_beginning);
+    CU_ADD_TEST(nh_test_suite, test_nulls_in_the_end);
+    CU_ADD_TEST(nh_test_suite, test_five_null_one_segment_only_in_file);
+    CU_ADD_TEST(nh_test_suite, test_five_null_one_segment_followed_by_one_nonnull);
+    CU_ADD_TEST(nh_test_suite, test_two_nulls_two_segments_both_segments_at_each_end);
+    CU_ADD_TEST(nh_test_suite, test_two_segments_both_segments_in_between);
 
 
     CU_basic_run_tests();
