@@ -12,8 +12,10 @@ typedef enum {
 typedef struct null_stats {
     int total_null_count;
     int null_segments;
+    int max_segment_size;
 } NULL_STATS, *P_NULL_STATS;
 
 NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats);
+void util_print_null_stats(P_NULL_STATS p_stats);
 
 #endif

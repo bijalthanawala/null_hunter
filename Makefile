@@ -13,6 +13,8 @@ test_null_hunter.o: test_null_hunter.c
 test_null_hunter: null_hunter.o test_null_hunter.o
 	gcc -o test_null_hunter null_hunter.o test_null_hunter.o -lcunit
 
+all: null_hunter test_null_hunter
+
 clean:
 	if [ -e null_hunter.o ]; then rm null_hunter.o; fi;
 	if [ -e main.o ]; then rm main.o; fi;
