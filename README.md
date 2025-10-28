@@ -5,12 +5,12 @@
 make
 ```
 
-## Cleanup the built artifacts
+## Cleanup all built artifacts
 ```
 make clean
 ```
 
 ## Run
 ```
-null_hunter <name of the file>
+./null_hunter <name of the file to count null-s in>
 ```
