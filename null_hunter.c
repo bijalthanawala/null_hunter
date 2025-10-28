@@ -7,6 +7,10 @@ void count_null(FILE* fp, P_NULL_STATS p_null_stats) {
     p_null_stats->null_segments = 0;
     p_null_stats->total_null_count = 0;
 
+    if(!fp) {
+        return;
+    }
+
     while(ch != -1) {
         ch = fgetc(fp);
 
