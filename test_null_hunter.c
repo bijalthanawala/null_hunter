@@ -95,9 +95,7 @@ void test_nulls_in_the_beginning(void)
     FILE *fp = tmpfile();
     NH_STATUS status = NH_SUCCESS;
 
-    fputc(0, fp);
-    fputc(0, fp);
-    fputc(0, fp);
+    fwrite("\0\0\0", 3, 1, fp);
     fputs("ABCD", fp);
 
     fseek(fp, SEEK_SET, 0);
@@ -118,10 +116,7 @@ void test_nulls_in_the_end(void)
     NH_STATUS status = NH_SUCCESS;
 
     fputs("ABCD", fp);
-    fputc(0, fp);
-    fputc(0, fp);
-    fputc(0, fp);
-    fputc(0, fp);
+    fwrite("\0\0\0\0", 4, 1, fp);
     fseek(fp, SEEK_SET, 0);
 
     status = null_hunter(fp, &stats);
@@ -138,8 +133,7 @@ void test_five_null_one_segment_only_in_file(void)
     FILE *fp = tmpfile();
     NH_STATUS status = NH_SUCCESS;
 
-    for(int i=0; i<5; i++)
-        fputc(0, fp);
+    fwrite("\0\0\0\0\0", 5, 1, fp);
     fseek(fp, SEEK_SET, 0);
 
     status = null_hunter(fp, &stats);
@@ -157,8 +151,7 @@ void test_five_null_one_segment_followed_by_one_nonnull(void)
     FILE *fp = tmpfile();
     NH_STATUS status = NH_SUCCESS;
 
-    for(int i=0; i<5; i++)
-        fputc(0, fp);
+    fwrite("\0\0\0\0\0", 5, 1, fp);
     fputc('A', fp);
     fseek(fp, SEEK_SET, 0);
 
@@ -171,7 +164,7 @@ void test_five_null_one_segment_followed_by_one_nonnull(void)
     CU_ASSERT_EQUAL(stats.null_segments, 1);
 }
 
-void test_two_nulls_two_segments_both_segments_at_front_and_end(void)
+void test_two_nulls_two_segments_both_segments_at_each_end(void)
 {
     NULL_STATS stats = {0};
     FILE *fp = tmpfile();
@@ -199,15 +192,10 @@ void test_two_segments_both_segments_in_between(void)
     NH_STATUS status = NH_SUCCESS;
 
     fputc('A', fp);
-    fputc(0, fp);
-    fputc(0, fp);
+    fwrite("\0\0", 2, 1, fp);
     fputc('B', fp);
-    fputc(0, fp);
-    fputc(0, fp);
-    fputc(0, fp);
-    fputc(0, fp);
+    fwrite("\0\0\0\0", 4, 1, fp);
     fputc('C', fp);
-
 
     fseek(fp, SEEK_SET, 0);
 
@@ -227,17 +215,17 @@ int main()
     CU_pSuite null_hunter_tests = CU_add_suite("null_hunter_file_test_suite", NULL, NULL);
     CU_add_test(null_hunter_tests, "NULL file pointer", test_null_fp);
     CU_add_test(null_hunter_tests, "NULL stats pointer", test_null_stats);
-    CU_add_test(null_hunter_tests, "zero length file", test_zero_length_file);
-    CU_add_test(null_hunter_tests, "no null in file of size one byte", test_no_null_file_size_one);
-    CU_add_test(null_hunter_tests, "no null in file of size five bytes", test_no_null_file_size_five);
-    CU_add_test(null_hunter_tests, "one null in file of size one byte", test_one_null_file_size_one);
+    CU_add_test(null_hunter_tests, "test_zero_length_file", test_zero_length_file);
+    CU_add_test(null_hunter_tests, "test_no_null_file_size_one", test_no_null_file_size_one);
+    CU_add_test(null_hunter_tests, "test_no_null_file_size_five", test_no_null_file_size_five);
+    CU_add_test(null_hunter_tests, "test_one_null_file_size_one", test_one_null_file_size_one);
 
     CU_add_test(null_hunter_tests, "test_nulls_in_the_beginning", test_nulls_in_the_beginning);
     CU_add_test(null_hunter_tests, "test_nulls_in_the_end", test_nulls_in_the_end);
 
-    CU_add_test(null_hunter_tests, "five NULLs in one segment only in a file", test_five_null_one_segment_only_in_file);
-    CU_add_test(null_hunter_tests, "five NULLs in one segment followed by one non-null char", test_five_null_one_segment_followed_by_one_nonnull);
-    CU_add_test(null_hunter_tests, "test_two_nulls_two_segments_both_segments_at_front_and_end", test_two_nulls_two_segments_both_segments_at_front_and_end);
+    CU_add_test(null_hunter_tests, "test_five_null_one_segment_only_in_file", test_five_null_one_segment_only_in_file);
+    CU_add_test(null_hunter_tests, "test_five_null_one_segment_followed_by_one_nonnull", test_five_null_one_segment_followed_by_one_nonnull);
+    CU_add_test(null_hunter_tests, "test_two_nulls_two_segments_both_segments_at_each_end", test_two_nulls_two_segments_both_segments_at_each_end);
     CU_add_test(null_hunter_tests, "test_two_segments_both_segments_in_between", test_two_segments_both_segments_in_between);
 
 
