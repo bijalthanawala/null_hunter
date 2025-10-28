@@ -1,0 +1,6 @@
+NULL Hunter
+TODO
+- Support big file sizes
+- Report the offset of the longest NULL segment
+- Support multiple longest NULL segments of equal length
+- Report offsets of all the segments (regardless of the lengths)
