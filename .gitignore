@@ -1,4 +1,8 @@
 *.o
 .vscode
+*.gcno
+*.gcda
+*.gcov
 null_hunter
 test_null_hunter
+test_null_hunter_coverage

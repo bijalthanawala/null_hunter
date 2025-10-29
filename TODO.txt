@@ -2,7 +2,6 @@ NULL Hunter
 TODO
 - Support big file sizes
 - Report offsets of all the segments (regardless of the lengths)
-- Get insight into code coverage by the tests
 - Github action to autorun tests on push
 - Debug build (with debug printfs)
 - Ratio: Show total NULLs to total file size ratio
@@ -12,3 +11,4 @@ TODO
 DONE
 - Report the offset of the longest NULL segment
 - Support multiple longest NULL segments of equal length
+- Coverage: Get insight into test coverage

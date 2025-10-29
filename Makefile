@@ -22,7 +22,10 @@ check: test_null_hunter
 	./test_null_hunter
 
 coverage:
-	gcc -O0 --coverage -o null_hunter null_hunter.c main.c
+	gcc -O0 --coverage -o test_null_hunter_coverage null_hunter.c test_null_hunter.c -lcunit
+	./test_null_hunter_coverage
+	gcov test_null_hunter_coverage-null_hunter
+	echo "View the file null_hunter.c.gcov for the details"
 
 clean:
 	if [ -e null_hunter.o ]; then rm null_hunter.o; fi;
@@ -30,3 +33,7 @@ clean:
 	if [ -e null_hunter ]; then rm null_hunter; fi;
 	if [ -e test_null_hunter.o ]; then rm test_null_hunter.o; fi;
 	if [ -e test_null_hunter ]; then rm test_null_hunter; fi;
+	if [ -e test_null_hunter_coverage ]; then rm test_null_hunter_coverage; fi;
+	find . -name "*.gcno" -delete
+	find . -name "*.gcda" -delete
+	find . -name "*.gcov" -delete
