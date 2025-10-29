@@ -311,7 +311,7 @@ void test_offset_of_last_longest_segment(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 20);
     CU_ASSERT_EQUAL(stats.null_segments, 6);
     CU_ASSERT_EQUAL(stats.longest_segment_size, 6);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 60 + 1); //Introduce error temporarily to test Github Actions
+    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 60);
 }
 
 int main()
