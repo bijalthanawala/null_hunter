@@ -7,6 +7,10 @@ TODO
 - Ratio: Show total NULLs to total file size ratio
 - Ratio: Show longest NULL segment size to file size ratio
 - Inform if the longest NULL segment is at the very end of the file
+- Move unittest files to a separate directory
+
+WISHLIST
+- Autoconf/Automake: configure file
 
 DONE
 - Report the offset of the longest NULL segment
