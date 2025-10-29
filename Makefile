@@ -15,6 +15,9 @@ test_null_hunter.o: test_null_hunter.c
 
 all: null_hunter test_null_hunter
 
+check: test_null_hunter
+	./test_null_hunter
+
 clean:
 	if [ -e null_hunter.o ]; then rm null_hunter.o; fi;
 	if [ -e main.o ]; then rm main.o; fi;
