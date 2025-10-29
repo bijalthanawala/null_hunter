@@ -4,3 +4,9 @@ TODO
 - Report the offset of the longest NULL segment
 - Support multiple longest NULL segments of equal length
 - Report offsets of all the segments (regardless of the lengths)
+- Get insight into code coverage by the tests
+- Github action to autorun tests on push
+- Debug build (with debug printfs)
+- Show total NULLs to total file size ratio
+- show longest NULL segment size to file size ratio
+- Inform if the longest NULL segment is at the very end of the file
