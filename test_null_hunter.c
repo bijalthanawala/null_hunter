@@ -316,6 +316,9 @@ void test_offset_of_last_longest_segment(void)
 
 int main()
 {
+    int num_failed_tests = 0;
+    CU_ErrorCode cu_error = CUE_SUCCESS;
+
     CU_initialize_registry();
 
     CU_pSuite nh_test_suite = CU_add_suite("null_hunter_file_test_suite", NULL, NULL);
@@ -335,8 +338,21 @@ int main()
     CU_ADD_TEST(nh_test_suite, test_offset_of_longest_segment);
     CU_ADD_TEST(nh_test_suite, test_offset_of_last_longest_segment);
 
+    CU_basic_set_mode(CU_BRM_VERBOSE);
+
     CU_basic_run_tests();
+
+    cu_error = CU_get_error();
+
+    num_failed_tests = CU_get_number_of_tests_failed();
+    if(num_failed_tests)
+        printf("Number of failed tests = %d\n", num_failed_tests);
+
+
     CU_cleanup_registry();
 
-    return CU_get_error();
+    if(num_failed_tests || cu_error!=CUE_SUCCESS)
+        return 1;    // Report error
+
+    return 0;  // Report success
 }
