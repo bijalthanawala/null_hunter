@@ -3,7 +3,7 @@
 #include "null_hunter.h"
 
 NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
-    char ch = 0;
+    int ch = 0;
     int this_seg_size = 0;
     int max_seg_size = 0;
 

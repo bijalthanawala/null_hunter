@@ -218,6 +218,33 @@ void test_two_segments_both_segments_in_between(void)
     CU_ASSERT_EQUAL(stats.max_segment_size, 4);
 }
 
+void test_char_0xff_in_between(void)
+{
+    NULL_STATS stats = {0};
+    FILE *fp = tmpfile();
+    NH_STATUS status = NH_SUCCESS;
+
+    fputc('A', fp);
+    fwrite("\0\0\0", 3, 1, fp);
+    fputc(0xff, fp);
+    fwrite("\0\0\0\0\0\0", 6, 1, fp);
+    fputc('C', fp);
+
+    fseek(fp, SEEK_SET, 0);
+
+    status = null_hunter(fp, &stats);
+
+    util_print_null_stats(&stats);
+
+    fclose(fp);
+
+    CU_ASSERT(status == NH_SUCCESS);
+    CU_ASSERT_EQUAL(stats.total_null_count, 9);
+    CU_ASSERT_EQUAL(stats.null_segments, 2);
+    CU_ASSERT_EQUAL(stats.max_segment_size, 6);
+}
+
+
 int main()
 {
     CU_initialize_registry();
@@ -235,9 +262,10 @@ int main()
     CU_ADD_TEST(nh_test_suite, test_five_null_one_segment_followed_by_one_nonnull);
     CU_ADD_TEST(nh_test_suite, test_two_nulls_two_segments_both_segments_at_each_end);
     CU_ADD_TEST(nh_test_suite, test_two_segments_both_segments_in_between);
-
+    CU_ADD_TEST(nh_test_suite, test_char_0xff_in_between);
 
     CU_basic_run_tests();
     CU_cleanup_registry();
+
     return CU_get_error();
 }
