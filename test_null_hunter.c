@@ -234,8 +234,6 @@ void test_char_0xff_in_between(void)
 
     status = null_hunter(fp, &stats);
 
-    util_print_null_stats(&stats);
-
     fclose(fp);
 
     CU_ASSERT(status == NH_SUCCESS);
@@ -244,6 +242,77 @@ void test_char_0xff_in_between(void)
     CU_ASSERT_EQUAL(stats.max_segment_size, 6);
 }
 
+void test_offset_of_longest_segment(void)
+{
+    NULL_STATS stats = {0};
+    FILE *fp = tmpfile();
+    NH_STATUS status = NH_SUCCESS;
+
+    fputs("ABCDEFGHIJ", fp);          // 10 Characters
+
+    fwrite("\0\0\0", 3, 1, fp);       // 3 NULLs
+    fputs("1234567", fp);             // 7 Characters
+
+    fwrite("\0\0", 2, 1, fp);         // 2 NULLs
+    fputs("12345678", fp);            // 8 Characters
+
+    fwrite("\0\0\0\0\0", 5, 1, fp);   // 5 NULLs      <--- Offset 30
+    fputs("12345", fp);               // 5 Characters
+
+    fwrite("\0", 1, 1, fp);           // 1 NULLs
+    fputs("123456789", fp);           // 9 Characters
+
+    fseek(fp, SEEK_SET, 0);
+
+    status = null_hunter(fp, &stats);
+
+    fclose(fp);
+
+    CU_ASSERT(status == NH_SUCCESS);
+    CU_ASSERT_EQUAL(stats.total_null_count, 11);
+    CU_ASSERT_EQUAL(stats.null_segments, 4);
+    CU_ASSERT_EQUAL(stats.max_segment_size, 5);
+    CU_ASSERT_EQUAL(stats.last_max_segment_offset, 30);
+}
+
+void test_offset_of_last_longest_segment(void)
+{
+    NULL_STATS stats = {0};
+    FILE *fp = tmpfile();
+    NH_STATUS status = NH_SUCCESS;
+
+    fputs("ABCDEFGHIJ", fp);            // 10 Characters
+
+    fwrite("\0\0\0", 3, 1, fp);         // 3 NULLs
+    fputs("1234567", fp);               // 7 Characters
+
+    fwrite("\0\0", 2, 1, fp);           // 2 NULLs
+    fputs("12345678", fp);              // 8 Characters
+
+    fwrite("\0\0\0\0\0\0", 6, 1, fp);   // 6 NULLs      <--- Offset 30
+    fputs("1234", fp);                  // 4 Characters
+
+    fwrite("\0", 1, 1, fp);             // 1 NULLs
+    fputs("123456789", fp);             // 9 Characters
+
+    fwrite("\0\0", 2, 1, fp);           // 2 NULLs
+    fputs("12345678", fp);              // 8 Characters
+
+    fwrite("\0\0\0\0\0\0", 6, 1, fp);   // 6 NULLs      <--- Offset 60
+    fputs("1234", fp);                  // 4 Characters
+
+    fseek(fp, SEEK_SET, 0);
+
+    status = null_hunter(fp, &stats);
+
+    fclose(fp);
+
+    CU_ASSERT(status == NH_SUCCESS);
+    CU_ASSERT_EQUAL(stats.total_null_count, 20);
+    CU_ASSERT_EQUAL(stats.null_segments, 6);
+    CU_ASSERT_EQUAL(stats.max_segment_size, 6);
+    CU_ASSERT_EQUAL(stats.last_max_segment_offset, 60);
+}
 
 int main()
 {
@@ -263,6 +332,8 @@ int main()
     CU_ADD_TEST(nh_test_suite, test_two_nulls_two_segments_both_segments_at_each_end);
     CU_ADD_TEST(nh_test_suite, test_two_segments_both_segments_in_between);
     CU_ADD_TEST(nh_test_suite, test_char_0xff_in_between);
+    CU_ADD_TEST(nh_test_suite, test_offset_of_longest_segment);
+    CU_ADD_TEST(nh_test_suite, test_offset_of_last_longest_segment);
 
     CU_basic_run_tests();
     CU_cleanup_registry();
