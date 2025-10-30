@@ -10,6 +10,7 @@ typedef enum {
 } NH_STATUS;
 
 typedef struct null_stats {
+    unsigned long file_size;
     unsigned long total_null_count;
     unsigned long total_null_segments;
     unsigned long longest_segment_size;

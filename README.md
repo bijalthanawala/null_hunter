@@ -13,9 +13,14 @@ make
 ```
 Example output:
 ```
- ./null_hunter /bin/passwd
+./null_hunter /bin/passwd
 Scanning file /bin/passwd
-Found total 29889 NULL characters in 4755 segments, with longest segment of 3915 characters at offset 12469
+File size = 64152
+Total NULL count = 29889 (46.59%)
+Total NULL segments = 4755
+Longest segment size = 3915 (6.10%)
+Offset of the (last) longest segment = 12469
+
 ```
 
 ## Unit testing

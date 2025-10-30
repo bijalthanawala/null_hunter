@@ -20,6 +20,11 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
     // Don't assume that caller has initialized the stats
     memset(p_null_stats, 0, sizeof(NULL_STATS));
 
+    // Determine the file size
+    fseek(fp, 0, SEEK_END);
+    p_null_stats->file_size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+
     while(ch != -1) {
 
         ch = fgetc(fp);
@@ -52,6 +57,7 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
 
 void util_print_null_stats(P_NULL_STATS p_stats) {
     printf("pstats @ %p:\n", (void *)p_stats);
+    printf("File size = %lu\n", p_stats->file_size);
     printf("total_null_count = %lu\n", p_stats->total_null_count);
     printf("null_segments = %lu\n", p_stats->total_null_segments);
     printf("longest_segment_size = %lu\n", p_stats->longest_segment_size);
