@@ -62,13 +62,17 @@ Suite: null_hunter_file_test_suite
   Test: test_char_0xff_in_between ...passed
   Test: test_offset_of_longest_segment ...passed
   Test: test_offset_of_last_longest_segment ...passed
+  Test: test_3GB_file_all_zeroes ...passed
+  Test: test_3GB_file_two_segments ...passed
+  Test: test_4GB_file_all_zeroes ...passed
+  Test: test_4GB_file_two_segments ...passed
 
 Run Summary:    Type  Total    Ran Passed Failed Inactive
               suites      1      1    n/a      0        0
-               tests     15     15     15      0        0
-             asserts     56     56     56      0      n/a
+               tests     19     19     19      0        0
+             asserts     76     76     76      0      n/a
 
-Elapsed time =    0.000 seconds
+Elapsed time =   35.454 seconds
 ```
 
 ### Alternatively, build & run unit tests _with coverage_ using this single command
@@ -104,13 +108,17 @@ Suite: null_hunter_file_test_suite
   Test: test_char_0xff_in_between ...passed
   Test: test_offset_of_longest_segment ...passed
   Test: test_offset_of_last_longest_segment ...passed
+  Test: test_3GB_file_all_zeroes ...passed
+  Test: test_3GB_file_two_segments ...passed
+  Test: test_4GB_file_all_zeroes ...passed
+  Test: test_4GB_file_two_segments ...passed
 
 Run Summary:    Type  Total    Ran Passed Failed Inactive
               suites      1      1    n/a      0        0
-               tests     15     15     15      0        0
-             asserts     56     56     56      0      n/a
+               tests     19     19     19      0        0
+             asserts     76     76     76      0      n/a
 
-Elapsed time =    0.000 seconds
+Elapsed time =   42.297 seconds
 gcov coverage/test_null_hunter_coverage-null_hunter
 File 'null_hunter.c'
 Lines executed:80.00% of 35
