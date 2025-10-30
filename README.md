@@ -140,9 +140,9 @@ make clean
 Example output:
 ```
 make clean
-find . -name null_hunter -delete
-find . -name test_null_hunter -delete
-find . -name test_null_hunter_coverage -delete
+find . -type f -name null_hunter -delete
+find . -type f -name test_null_hunter -delete
+find . -type f -name test_null_hunter_coverage -delete
 find . -name "*.o" -delete
 find . -name "*.gcno" -delete
 find . -name "*.gcda" -delete
