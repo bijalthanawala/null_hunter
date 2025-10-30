@@ -1,5 +1,6 @@
 NULL Hunter
 TODO
+- For the large file - Read in chunks instead of a character at a time and reduce I/O
 - Unit test: Utilize different suites to avoid recreating large files with each test
 - Report offsets of all the segments (regardless of the lengths)
 - Debug build (with debug printfs)
