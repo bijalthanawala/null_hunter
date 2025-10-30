@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
         return status;
     }
 
-    printf("Found total %d NULL characters in %d segments, with longest segment of %d characters at offset %d\n",
+    printf("Found total %lu NULL characters in %lu segments, with longest segment of %lu characters at offset %lu\n",
         null_stats.total_null_count,
         null_stats.null_segments,
         null_stats.longest_segment_size,

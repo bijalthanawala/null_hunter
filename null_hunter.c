@@ -4,10 +4,10 @@
 
 NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
     int ch = 0;
-    int this_segment_size = 0;
-    int longest_segment_size = 0;
-    int longest_last_segment_offset = 0;
-    int current_offset = 0;
+    unsigned long this_segment_size = 0;
+    unsigned long longest_segment_size = 0;
+    unsigned long longest_last_segment_offset = 0;
+    unsigned long current_offset = 0;
 
     if(!fp) {
         return NH_ERROR_NULL_FILE_POINTER;
@@ -52,8 +52,8 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
 
 void util_print_null_stats(P_NULL_STATS p_stats) {
     printf("pstats @ %p:\n", (void *)p_stats);
-    printf("total_null_count = %d\n", p_stats->total_null_count);
-    printf("null_segments = %d\n", p_stats->null_segments);
-    printf("longest_segment_size = %d\n", p_stats->longest_segment_size);
-    printf("longest_last_segment_offset = %d\n", p_stats->longest_last_segment_offset);
+    printf("total_null_count = %lu\n", p_stats->total_null_count);
+    printf("null_segments = %lu\n", p_stats->null_segments);
+    printf("longest_segment_size = %lu\n", p_stats->longest_segment_size);
+    printf("longest_last_segment_offset = %lu\n", p_stats->longest_last_segment_offset);
 }

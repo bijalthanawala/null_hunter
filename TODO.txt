@@ -1,6 +1,5 @@
 NULL Hunter
 TODO
-- Support big file sizes
 - Report offsets of all the segments (regardless of the lengths)
 - Debug build (with debug printfs)
 - Ratio: Show total NULLs to total file size ratio
@@ -16,3 +15,4 @@ DONE
 - Github action to autorun tests on push
 - Move unittest files to a separate directory
 - Coverage: Get insight into test coverage
+- Support big file sizes
