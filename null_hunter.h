@@ -11,7 +11,7 @@ typedef enum {
 
 typedef struct null_stats {
     unsigned long total_null_count;
-    unsigned long null_segments;
+    unsigned long total_null_segments;
     unsigned long longest_segment_size;
     unsigned long longest_last_segment_offset;
 } NULL_STATS, *P_NULL_STATS;

@@ -27,7 +27,7 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
         this_segment_size = 0;
 
         if(ch == 0) {
-            p_null_stats->null_segments++;
+            p_null_stats->total_null_segments++;
         }
 
         while(ch == 0) {
@@ -53,7 +53,7 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
 void util_print_null_stats(P_NULL_STATS p_stats) {
     printf("pstats @ %p:\n", (void *)p_stats);
     printf("total_null_count = %lu\n", p_stats->total_null_count);
-    printf("null_segments = %lu\n", p_stats->null_segments);
+    printf("null_segments = %lu\n", p_stats->total_null_segments);
     printf("longest_segment_size = %lu\n", p_stats->longest_segment_size);
     printf("longest_last_segment_offset = %lu\n", p_stats->longest_last_segment_offset);
 }
