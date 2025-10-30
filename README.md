@@ -29,13 +29,13 @@ sudo apt install libcunit1 libcunit1-dev libcunit1-doc
 
 ### Build & run unit tests using this single command
 ```
-make test
+make run_tests
 ```
 _The above command runs unit tests automatically after building_
 
 Example output:
 ```
-make test
+make run_tests
 gcc -Wall -Wpedantic -std=c2x -c -o build/null_hunter.o null_hunter.c
 gcc -Wall -Wpedantic -std=c2x -c -o test/test_null_hunter.o test/test_null_hunter.c
 gcc -o test/test_null_hunter build/null_hunter.o test/test_null_hunter.o -lcunit
@@ -77,13 +77,13 @@ Elapsed time =   35.454 seconds
 
 ### Alternatively, build & run unit tests _with coverage_ using this single command
 ```
-make test_with_coverage
+make run_tests_with_coverage
 ```
 _The above command builds, runs unit tests and shows the coverage_
 
 Example output:
 ```
-make test_with_coverage
+make run_tests_with_coverage
 gcc -O0 --coverage -o coverage/test_null_hunter_coverage null_hunter.c test/test_null_hunter.c -lcunit
 coverage/test_null_hunter_coverage
 
