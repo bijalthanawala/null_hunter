@@ -2,12 +2,10 @@ NULL Hunter
 TODO
 - Support big file sizes
 - Report offsets of all the segments (regardless of the lengths)
-- Github action to autorun tests on push
 - Debug build (with debug printfs)
 - Ratio: Show total NULLs to total file size ratio
 - Ratio: Show longest NULL segment size to file size ratio
 - Inform if the longest NULL segment is at the very end of the file
-- Move unittest files to a separate directory
 
 WISHLIST
 - Autoconf/Automake: configure file
@@ -15,4 +13,6 @@ WISHLIST
 DONE
 - Report the offset of the longest NULL segment
 - Support multiple longest NULL segments of equal length
+- Github action to autorun tests on push
+- Move unittest files to a separate directory
 - Coverage: Get insight into test coverage

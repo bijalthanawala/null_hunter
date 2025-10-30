@@ -4,7 +4,7 @@
 #include <stdlib.h>   // For mkdtemp()
 #include <unistd.h>  // For rmdir()
 
-#include "null_hunter.h"
+#include "../null_hunter.h"
 
 #define CU_SUITE_SETUP_SUCCESS 0
 #define CU_SUITE_SETUP_ERROR 1

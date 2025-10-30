@@ -1,39 +1,47 @@
-CC=gcc
-CFLAGS=-Wall -Wpedantic -std=c2x
+CC := gcc
+CFLAGS := -Wall -Wpedantic -std=c2x
+BUILD_DIR := build
+TEST_DIR := test
+COVERAGE_DIR := coverage
 
-all: null_hunter test_null_hunter
+all: $(BUILD_DIR) null_hunter $(TEST_DIR)/test_null_hunter
 
-null_hunter: null_hunter.o main.o
-	$(CC) -o null_hunter null_hunter.o main.o
+test: $(TEST_DIR)/test_null_hunter
+	$(TEST_DIR)/test_null_hunter
 
-test_null_hunter: null_hunter.o test_null_hunter.o
-	$(CC) -o test_null_hunter null_hunter.o test_null_hunter.o -lcunit
+check: test
 
-null_hunter.o: null_hunter.c
-	$(CC) $(CFLAGS) -c -o null_hunter.o null_hunter.c
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
-main.o: main.c
-	$(CC) $(CFLAGS) -c -o main.o main.c
+null_hunter: $(BUILD_DIR)/null_hunter.o $(BUILD_DIR)/main.o
+	$(CC) -o null_hunter $(BUILD_DIR)/null_hunter.o $(BUILD_DIR)/main.o
 
-test_null_hunter.o: test_null_hunter.c
-	$(CC) $(CFLAGS) -c -o test_null_hunter.o test_null_hunter.c
+$(BUILD_DIR)/null_hunter.o: null_hunter.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/null_hunter.o null_hunter.c
 
-check: test_null_hunter
-	./test_null_hunter
+$(BUILD_DIR)/main.o: main.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/main.o main.c
 
-coverage:
-	gcc -O0 --coverage -o test_null_hunter_coverage null_hunter.c test_null_hunter.c -lcunit
-	./test_null_hunter_coverage
-	gcov test_null_hunter_coverage-null_hunter
-	echo "View the file null_hunter.c.gcov for the details"
+$(TEST_DIR)/test_null_hunter: $(BUILD_DIR)/null_hunter.o $(TEST_DIR)/test_null_hunter.o
+	$(CC) -o $(TEST_DIR)/test_null_hunter $(BUILD_DIR)/null_hunter.o $(TEST_DIR)/test_null_hunter.o -lcunit
+
+$(TEST_DIR)/test_null_hunter.o: $(TEST_DIR)/test_null_hunter.c
+	$(CC) $(CFLAGS) -c -o $(TEST_DIR)/test_null_hunter.o $(TEST_DIR)/test_null_hunter.c
+
+$(COVERAGE_DIR):
+	mkdir -p $(COVERAGE_DIR)
+
+test_with_coverage: $(COVERAGE_DIR)
+	$(CC) -O0 --coverage -o $(COVERAGE_DIR)/test_null_hunter_coverage null_hunter.c $(TEST_DIR)/test_null_hunter.c -lcunit
+	$(COVERAGE_DIR)/test_null_hunter_coverage
+	gcov $(COVERAGE_DIR)/test_null_hunter_coverage-null_hunter
 
 clean:
-	if [ -e null_hunter.o ]; then rm null_hunter.o; fi;
-	if [ -e main.o ]; then rm main.o; fi;
-	if [ -e null_hunter ]; then rm null_hunter; fi;
-	if [ -e test_null_hunter.o ]; then rm test_null_hunter.o; fi;
-	if [ -e test_null_hunter ]; then rm test_null_hunter; fi;
-	if [ -e test_null_hunter_coverage ]; then rm test_null_hunter_coverage; fi;
+	find . -name null_hunter -delete
+	find . -name test_null_hunter -delete
+	find . -name test_null_hunter_coverage -delete
+	find . -name "*.o" -delete
 	find . -name "*.gcno" -delete
 	find . -name "*.gcda" -delete
 	find . -name "*.gcov" -delete
