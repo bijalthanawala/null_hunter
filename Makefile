@@ -17,7 +17,7 @@ $(BUILD_DIR):
 null_hunter: $(BUILD_DIR)/null_hunter.o $(BUILD_DIR)/main.o
 	$(CC) -o null_hunter $(BUILD_DIR)/null_hunter.o $(BUILD_DIR)/main.o
 
-$(BUILD_DIR)/null_hunter.o: null_hunter.c | $(BUILD_DIR)
+$(BUILD_DIR)/null_hunter.o: null_hunter.c null_hunter.h | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/null_hunter.o null_hunter.c
 
 $(BUILD_DIR)/main.o: main.c | $(BUILD_DIR)
@@ -26,7 +26,7 @@ $(BUILD_DIR)/main.o: main.c | $(BUILD_DIR)
 $(TEST_DIR)/test_null_hunter: $(BUILD_DIR)/null_hunter.o $(TEST_DIR)/test_null_hunter.o
 	$(CC) -o $(TEST_DIR)/test_null_hunter $(BUILD_DIR)/null_hunter.o $(TEST_DIR)/test_null_hunter.o -lcunit
 
-$(TEST_DIR)/test_null_hunter.o: $(TEST_DIR)/test_null_hunter.c
+$(TEST_DIR)/test_null_hunter.o: $(TEST_DIR)/test_null_hunter.c null_hunter.h
 	$(CC) $(CFLAGS) -c -o $(TEST_DIR)/test_null_hunter.o $(TEST_DIR)/test_null_hunter.c
 
 $(COVERAGE_DIR):
