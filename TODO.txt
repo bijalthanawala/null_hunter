@@ -1,13 +1,12 @@
 NULL Hunter
 TODO
-- For the large file - Read in chunks instead of a character at a time and reduce I/O
-- Unit test: Setup different test suites to avoid recreating large files with each test
-- Report offsets of all the segments (regardless of the lengths)
-- Debug build (with debug printfs)
 - Inform if the longest NULL segment is at the very end of the file
+- Report offsets of all the segments (regardless of the lengths)
+- For the large file - Read in chunks instead of a character at a time and reduce I/O
 
 WISHLIST
-- Autoconf/Automake: configure file
+- Autoconf/Automake: 'configure' file
+- Debug build (with debug printfs)
 
 DONE
 - Report the offset of the longest NULL segment
@@ -18,3 +17,4 @@ DONE
 - Support big file sizes
 - Ratio: Show total NULLs to total file size ratio
 - Ratio: Show longest NULL segment size to file size ratio
+- Unit test: Setup different test suites to avoid recreating large files with each test
