@@ -1,3 +1,5 @@
+/* includes
+*************/
 #include <CUnit/Basic.h>
 #include <CUnit/CUnit.h>
 
@@ -6,19 +8,43 @@
 
 #include "../null_hunter.h"
 
+/*  Definitions / macros
+***************************/
+#define MB_1     (unsigned long)(1024 * 1024)
+#define MB_250   (unsigned long)(MB_1 * 250)
+#define MB_500   (unsigned long)(MB_1 * 500)
+#define MB_750   (unsigned long)(MB_1 * 750)
+#define GB_1     (unsigned long)(MB_1 * 1024)
+#define GB_1_25  (unsigned long)(GB_1 + MB_250)  // 1.25GB
+#define GB_1_50  (unsigned long)(GB_1 + MB_500)  // 1.50GB
+#define GB_1_75  (unsigned long)(GB_1 + MB_750)  // 1.75GB
+#define GB_2     (unsigned long)(GB_1 * 2)
+#define GB_2_25  (unsigned long)(GB_2 + MB_250)  //2.25GB
+
 #define SUCCESS 0
 #define ERROR 1
 
+
+/* Globals
+************/
 FILE *fp_3GB = NULL;
 FILE *fp_4GB = NULL;
+FILE *fp_6GB = NULL;
 
+/* Function declarations
+**************************/
+int init_3GB_test_file(FILE*, char);
+int init_4GB_test_file(FILE*, char);
+int init_6GB_test_file(FILE*, char);
+
+/* functions
+**************/
 void test_null_fp(void)
 {
     NULL_STATS null_stats = {0};
     NH_STATUS status = null_hunter(NULL, &null_stats);
     CU_ASSERT_EQUAL(status, NH_ERROR_NULL_FILE_POINTER);
 }
-
 
 void test_null_stats(void)
 {
@@ -372,14 +398,108 @@ void test_4GB_file_two_segments() {
     status = null_hunter(fp_4GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned)4 * 1024 * 1024 * 1024) - 1);
+    CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned long)4 * 1024 * 1024 * 1024) - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, ((unsigned)4 * 1024 * 1024 * 1024) - 200);
+    CU_ASSERT_EQUAL(stats.longest_segment_size, ((unsigned long)4 * 1024 * 1024 * 1024) - 200);
     CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 200);
 }
 
-int init_3GB_test_file() {
+void test_4GB_file_nine_segments() {
+    NULL_STATS stats = {0};
+    NH_STATUS status = NH_SUCCESS;
+    char buff[40] = {};
+
+    init_4GB_test_file(fp_4GB, 'A');
+
+    fseek(fp_4GB, MB_250, SEEK_SET);  // Offset 250MB
+    fwrite(buff, 10, 1, fp_4GB);
+
+    fseek(fp_4GB, MB_500, SEEK_SET);  // Offset 500MB
+    fwrite(buff, 20, 1, fp_4GB);
+
+    fseek(fp_4GB, MB_750 , SEEK_SET);  // Offset 750MB
+    fwrite(buff, 20, 1, fp_4GB);
+
+    fseek(fp_4GB, GB_1, SEEK_SET);  // Offset 1GB
+    fwrite(buff, 30, 1, fp_4GB);
+
+    fseek(fp_4GB, GB_1_25, SEEK_SET);  // Offset 1.25GB
+    fwrite(buff, 30, 1, fp_4GB);
+
+    fseek(fp_4GB, GB_1_50, SEEK_SET);  // Offset 1.50GB
+    fwrite(buff, 30, 1, fp_4GB);
+
+    fseek(fp_4GB, GB_1_75, SEEK_SET);  // Offset 1.75GB
+    fwrite(buff, 20, 1, fp_4GB);
+
+    fseek(fp_4GB, GB_2, SEEK_SET);  // Offset 2GB
+    fwrite(buff, 20, 1, fp_4GB);
+
+    fseek(fp_4GB, GB_2_25, SEEK_SET);  // Offset 2.25GB
+    fwrite(buff, 10, 1, fp_4GB);
+
+    fseek(fp_4GB, SEEK_SET, 0);
+
+    status = null_hunter(fp_4GB, &stats);
+
+    CU_ASSERT(status == NH_SUCCESS);
+    CU_ASSERT_EQUAL(stats.total_null_count, (10 + 20 + 20 + 30 + 30 + 30 + 20 + 20 + 10));
+    CU_ASSERT_EQUAL(stats.total_null_segments, 9);
+    CU_ASSERT_EQUAL(stats.longest_segment_size, 30);
+    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, GB_1_50);
+}
+
+void test_6GB_file_all_zeroes() {
+    NULL_STATS stats = {0};
+    NH_STATUS status = NH_SUCCESS;
+
+    fseek(fp_6GB, SEEK_SET, 0);
+
+    status = null_hunter(fp_6GB, &stats);
+
+    CU_ASSERT(status == NH_SUCCESS);
+    CU_ASSERT_EQUAL(stats.total_null_count, (unsigned long)6 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.total_null_segments, 1);
+    CU_ASSERT_EQUAL(stats.longest_segment_size, (unsigned long)6 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 0);
+}
+
+void test_6GB_file_two_segments() {
+    NULL_STATS stats = {0};
+    NH_STATUS status = NH_SUCCESS;
+
+    fseek(fp_6GB, 499, SEEK_SET);
+    fputc('A', fp_6GB);
+
+    fseek(fp_6GB, SEEK_SET, 0);
+
+    status = null_hunter(fp_6GB, &stats);
+
+    CU_ASSERT(status == NH_SUCCESS);
+    CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned long)6 * 1024 * 1024 * 1024) - 1);
+    CU_ASSERT_EQUAL(stats.total_null_segments, 2);
+    CU_ASSERT_EQUAL(stats.longest_segment_size, ((unsigned long)6 * 1024 * 1024 * 1024) - 500);
+    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 500);
+}
+
+int init_3GB_test_file(FILE* fp, char init_char) {
     char buffer[3 * 1024 * 1024] = {}; //3 MB
+    memset(buffer, init_char, sizeof(buffer));
+
+    fseek(fp, SEEK_SET, 0);
+    for(int i=0; i<1024; i++) {
+        int written = fwrite(buffer, sizeof(buffer), 1, fp);
+        if(written != 1) {
+            printf("Failed to initialize 3GB test file\n");
+            return ERROR;
+        }
+    }
+    fseek(fp, SEEK_SET, 0);
+
+    return SUCCESS;
+}
+
+int open_3GB_test_file() {
     fp_3GB = tmpfile();
 
     if(!fp_3GB) {
@@ -387,17 +507,7 @@ int init_3GB_test_file() {
         return ERROR;
     }
 
-    for(int i=0; i<1024; i++) {
-        int written = fwrite(buffer, sizeof(buffer), 1, fp_3GB);
-        if(written != 1) {
-            printf("Failed to initialize 3GB test file\n");
-            return ERROR;
-        }
-    }
-
-    fseek(fp_3GB, SEEK_SET, 0);
-
-    return SUCCESS;
+    return init_3GB_test_file(fp_3GB, 0);
 }
 
 int close_3GB_test_file() {
@@ -405,8 +515,24 @@ int close_3GB_test_file() {
     return SUCCESS;
 }
 
-int init_4GB_test_file() {
+int init_4GB_test_file(FILE* fp, char init_char) {
     char buffer[4 * 1024 * 1024] = {}; //4 MB
+    memset(buffer, init_char, sizeof(buffer));
+
+    fseek(fp, SEEK_SET, 0);
+    for(int i=0; i<1024; i++) {
+        int written = fwrite(buffer, sizeof(buffer), 1, fp);
+        if(written != 1) {
+            printf("Failed to initialize 4GB test file\n");
+            return ERROR;
+        }
+    }
+    fseek(fp, SEEK_SET, 0);
+
+    return SUCCESS;
+}
+
+int open_4GB_test_file() {
     fp_4GB = tmpfile();
 
     if(!fp_4GB) {
@@ -414,21 +540,44 @@ int init_4GB_test_file() {
         return ERROR;
     }
 
+    return init_4GB_test_file(fp_3GB, 0);
+}
+
+int close_4GB_test_file() {
+    fclose(fp_4GB);
+    return SUCCESS;
+}
+
+int init_6GB_test_file(FILE* fp, char init_char) {
+    char buffer[6 * 1024 * 1024] = {}; //6 MB
+    memset(buffer, init_char, sizeof(buffer));
+
+    fseek(fp, SEEK_SET, 0);
     for(int i=0; i<1024; i++) {
-        int written = fwrite(buffer, sizeof(buffer), 1, fp_4GB);
+        int written = fwrite(buffer, sizeof(buffer), 1, fp);
         if(written != 1) {
             printf("Failed to initialize 4GB test file\n");
             return ERROR;
         }
     }
-
-    fseek(fp_4GB, SEEK_SET, 0);
+    fseek(fp, SEEK_SET, 0);
 
     return SUCCESS;
 }
 
-int close_4GB_test_file() {
-    fclose(fp_4GB);
+int open_6GB_test_file() {
+    fp_6GB = tmpfile();
+
+    if(!fp_6GB) {
+        printf("Failed to create 6GB test file\n");
+        return ERROR;
+    }
+
+    return init_6GB_test_file(fp_6GB, 0);
+}
+
+int close_6GB_test_file() {
+    fclose(fp_6GB);
     return SUCCESS;
 }
 
@@ -448,21 +597,27 @@ int main()
     CU_ErrorCode cu_status_suite_1 = CU_get_error();
     const char *cu_error_msg_suite_1 = CU_get_error_msg();
 
-    CU_pSuite nh_test_suite_3GB = CU_add_suite("null_hunter_test_suite_3GB", init_3GB_test_file, close_3GB_test_file);
+    CU_pSuite nh_test_suite_3GB = CU_add_suite("null_hunter_test_suite_3GB", open_3GB_test_file, close_3GB_test_file);
     CU_ErrorCode cu_status_suite_2 = CU_get_error();
     const char *cu_error_msg_suite_2 = CU_get_error_msg();
 
-    CU_pSuite nh_test_suite_4GB = CU_add_suite("null_hunter_test_suite_4GB", init_4GB_test_file, close_4GB_test_file);
+    CU_pSuite nh_test_suite_4GB = CU_add_suite("null_hunter_test_suite_4GB", open_4GB_test_file, close_4GB_test_file);
     CU_ErrorCode cu_status_suite_3 = CU_get_error();
     const char *cu_error_msg_suite_3 = CU_get_error_msg();
 
+    CU_pSuite nh_test_suite_6GB = CU_add_suite("null_hunter_test_suite_6GB", open_6GB_test_file, close_6GB_test_file);
+    CU_ErrorCode cu_status_suite_4 = CU_get_error();
+    const char *cu_error_msg_suite_4 = CU_get_error_msg();
+
     if(cu_status_suite_1 != CUE_SUCCESS ||
        cu_status_suite_2 != CUE_SUCCESS ||
-       cu_status_suite_3 != CUE_SUCCESS) {
+       cu_status_suite_3 != CUE_SUCCESS ||
+       cu_status_suite_4 != CUE_SUCCESS) {
         printf("Error setting up test suite\n");
         if(cu_status_suite_1 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite->pName, cu_error_msg_suite_1);
         if(cu_status_suite_2 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite_3GB->pName, cu_error_msg_suite_2);
         if(cu_status_suite_3 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite_4GB->pName, cu_error_msg_suite_3);
+        if(cu_status_suite_4 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite_6GB->pName, cu_error_msg_suite_4);
         return ERROR;
     }
 
@@ -487,6 +642,10 @@ int main()
 
     CU_ADD_TEST(nh_test_suite_4GB, test_4GB_file_all_zeroes);
     CU_ADD_TEST(nh_test_suite_4GB, test_4GB_file_two_segments);
+    CU_ADD_TEST(nh_test_suite_4GB, test_4GB_file_nine_segments);
+
+    CU_ADD_TEST(nh_test_suite_6GB, test_6GB_file_all_zeroes);
+    CU_ADD_TEST(nh_test_suite_6GB, test_6GB_file_two_segments);
 
     cu_status_suite_1 = CU_basic_run_suite(nh_test_suite);
     cu_error_msg_suite_1 = CU_get_error_msg();
@@ -500,13 +659,19 @@ int main()
     cu_error_msg_suite_3 = CU_get_error_msg();
     num_failed_tests += CU_get_number_of_tests_failed();
 
+    cu_status_suite_4 = CU_basic_run_suite(nh_test_suite_6GB);
+    cu_error_msg_suite_4 = CU_get_error_msg();
+    num_failed_tests += CU_get_number_of_tests_failed();
+
     if(cu_status_suite_1 != CUE_SUCCESS ||
        cu_status_suite_2 != CUE_SUCCESS ||
-       cu_status_suite_3 != CUE_SUCCESS) {
+       cu_status_suite_3 != CUE_SUCCESS ||
+       cu_status_suite_4 != CUE_SUCCESS) {
         printf("Error running tests\n");
         if(cu_status_suite_1 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite->pName, cu_error_msg_suite_1);
         if(cu_status_suite_2 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite_3GB->pName, cu_error_msg_suite_2);
         if(cu_status_suite_3 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite_4GB->pName, cu_error_msg_suite_3);
+        if(cu_status_suite_4 != CUE_SUCCESS) printf("%s: %s\n", nh_test_suite_6GB->pName, cu_error_msg_suite_4);
         return ERROR;
     }
 
