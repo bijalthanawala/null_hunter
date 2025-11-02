@@ -20,6 +20,9 @@
 #define GB_1_75  (unsigned long)(GB_1 + MB_750)  // 1.75GB
 #define GB_2     (unsigned long)(GB_1 * 2)
 #define GB_2_25  (unsigned long)(GB_2 + MB_250)  //2.25GB
+#define GB_3     (unsigned long)(GB_1 * 3)
+#define GB_4     (unsigned long)(GB_1 * 4)
+#define GB_6     (unsigned long)(GB_1 * 6)
 
 #define SUCCESS 0
 #define ERROR 1
@@ -348,9 +351,9 @@ void test_3GB_file_all_zeroes() {
     status = null_hunter(fp_3GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, (unsigned)3 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.total_null_count, GB_3);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_null_segment_size, (unsigned)3 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, GB_3);
     CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
@@ -365,9 +368,9 @@ void test_3GB_file_two_segments() {
     status = null_hunter(fp_3GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned)3 * 1024 * 1024 * 1024) - 1);
+    CU_ASSERT_EQUAL(stats.total_null_count, GB_3 - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_null_segment_size, ((unsigned)3 * 1024 * 1024 * 1024) - 100);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, GB_3 - 100);
     CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 100);
 }
 
@@ -380,9 +383,9 @@ void test_4GB_file_all_zeroes() {
     status = null_hunter(fp_4GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, (unsigned long)4 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.total_null_count, GB_4);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_null_segment_size, (unsigned long)4 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, GB_4);
     CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
@@ -398,9 +401,9 @@ void test_4GB_file_two_segments() {
     status = null_hunter(fp_4GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned long)4 * 1024 * 1024 * 1024) - 1);
+    CU_ASSERT_EQUAL(stats.total_null_count, GB_4 - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_null_segment_size, ((unsigned long)4 * 1024 * 1024 * 1024) - 200);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, GB_4 - 200);
     CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 200);
 }
 
@@ -458,9 +461,9 @@ void test_6GB_file_all_zeroes() {
     status = null_hunter(fp_6GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, (unsigned long)6 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.total_null_count, GB_6);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_null_segment_size, (unsigned long)6 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, GB_6);
     CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
@@ -476,9 +479,9 @@ void test_6GB_file_two_segments() {
     status = null_hunter(fp_6GB, &stats);
 
     CU_ASSERT(status == NH_SUCCESS);
-    CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned long)6 * 1024 * 1024 * 1024) - 1);
+    CU_ASSERT_EQUAL(stats.total_null_count, GB_6 - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_null_segment_size, ((unsigned long)6 * 1024 * 1024 * 1024) - 500);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, GB_6 - 500);
     CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 500);
 }
 
