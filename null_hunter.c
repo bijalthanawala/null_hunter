@@ -8,6 +8,7 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
     unsigned long longest_segment_size = 0;
     unsigned long longest_last_segment_offset = 0;
     unsigned long current_offset = 0;
+    unsigned long offset_start_of_null_segment = 0;
 
     if(!fp) {
         return NH_ERROR_NULL_FILE_POINTER;
@@ -33,6 +34,7 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
 
         if(ch == 0) {
             p_null_stats->total_null_segments++;
+            offset_start_of_null_segment = current_offset-1;
         }
 
         while(ch == 0) {
@@ -42,10 +44,20 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
             current_offset++;
         }
 
-        if(this_segment_size &&
-           (this_segment_size >= longest_segment_size)) {
-            longest_last_segment_offset = current_offset-this_segment_size-1;
-            longest_segment_size = this_segment_size;
+        // If we just observed a NULL segment
+        if(this_segment_size) {
+
+            // If this the longest NULL segment seen so far
+            if(this_segment_size >= longest_segment_size) {
+                longest_segment_size = this_segment_size;
+                //longest_last_segment_offset = current_offset-this_segment_size-1;
+                longest_last_segment_offset = offset_start_of_null_segment;
+            }
+
+            // If this NULL segment has appeared at the very end of the file
+            if((offset_start_of_null_segment+this_segment_size) == p_null_stats->file_size) {
+                p_null_stats->length_of_null_segment_at_file_end = this_segment_size;
+           }
         }
 
     } // End: while loop
@@ -63,4 +75,5 @@ void util_print_null_stats(P_NULL_STATS p_stats) {
     printf("null_segments = %lu\n", p_stats->total_null_segments);
     printf("longest_segment_size = %lu\n", p_stats->longest_null_segment_size);
     printf("longest_last_segment_offset = %lu\n", p_stats->longest_last_null_segment_offset);
+    printf("length_of_null_segment_at_file_end = %lu\n", p_stats->length_of_null_segment_at_file_end);
 }

@@ -30,6 +30,12 @@ int main(int argc, char **argv) {
     if(null_stats.longest_null_segment_size > 0) {
         printf("Offset of the (last) longest segment = %lu\n", null_stats.longest_last_null_segment_offset);
     }
+    printf("File ends with a NULL segment: %s\n",
+        null_stats.length_of_null_segment_at_file_end ? "True" : "False");
+    if(null_stats.length_of_null_segment_at_file_end) {
+        printf("Length of the NULL segment at the end of the file: %lu\n",
+            null_stats.length_of_null_segment_at_file_end);
+    }
 
     return status;
 }
