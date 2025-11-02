@@ -94,7 +94,7 @@ jobs:
           'your code, for example:'
         echo '  make bootstrap'
         echo '  make release'
-        make
+        make null_hunter
         exit 1
 
     - name: Perform CodeQL Analysis
