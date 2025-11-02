@@ -270,7 +270,7 @@ void test_char_0xff_in_between(void)
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 6);
 }
 
-void test_offset_of_longest_segment(void)
+void test_offset_of_longest_segment_within_many(void)
 {
     NULL_STATS stats = {0};
     FILE *fp = tmpfile();
@@ -637,7 +637,7 @@ int main()
     CU_ADD_TEST(nh_test_suite, test_two_nulls_two_segments_both_segments_at_each_end);
     CU_ADD_TEST(nh_test_suite, test_two_segments_both_segments_in_between);
     CU_ADD_TEST(nh_test_suite, test_char_0xff_in_between);
-    CU_ADD_TEST(nh_test_suite, test_offset_of_longest_segment);
+    CU_ADD_TEST(nh_test_suite, test_offset_of_longest_segment_within_many);
     CU_ADD_TEST(nh_test_suite, test_offset_of_last_longest_segment);
 
     CU_ADD_TEST(nh_test_suite_3GB, test_3GB_file_all_zeroes);
