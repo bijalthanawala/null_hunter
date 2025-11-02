@@ -50,7 +50,6 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
             // If this the longest NULL segment seen so far
             if(this_segment_size >= longest_segment_size) {
                 longest_segment_size = this_segment_size;
-                //longest_last_segment_offset = current_offset-this_segment_size-1;
                 longest_last_segment_offset = offset_start_of_null_segment;
             }
 
