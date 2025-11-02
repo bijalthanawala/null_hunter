@@ -64,7 +64,7 @@ void test_zero_length_file(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 0);
     CU_ASSERT_EQUAL(stats.total_null_segments, 0);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 0);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 0);
 }
 
 void test_no_null_file_size_one(void)
@@ -80,7 +80,7 @@ void test_no_null_file_size_one(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 0);
     CU_ASSERT_EQUAL(stats.total_null_segments, 0);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 0);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 0);
 }
 
 void test_no_null_file_size_five(void)
@@ -96,7 +96,7 @@ void test_no_null_file_size_five(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 0);
     CU_ASSERT_EQUAL(stats.total_null_segments, 0);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 0);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 0);
 }
 
 void test_one_null_file_size_one(void)
@@ -115,7 +115,7 @@ void test_one_null_file_size_one(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 1);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 1);
 }
 
 void test_nulls_in_the_beginning(void)
@@ -136,7 +136,7 @@ void test_nulls_in_the_beginning(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 3);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 3);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 3);
 }
 
 void test_nulls_in_the_end(void)
@@ -156,7 +156,7 @@ void test_nulls_in_the_end(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 4);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 4);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 4);
 }
 void test_five_null_one_segment_only_in_file(void)
 {
@@ -174,7 +174,7 @@ void test_five_null_one_segment_only_in_file(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 5);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 5);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 5);
 }
 
 void test_five_null_one_segment_followed_by_one_nonnull(void)
@@ -194,7 +194,7 @@ void test_five_null_one_segment_followed_by_one_nonnull(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 5);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 5);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 5);
 }
 
 void test_two_nulls_two_segments_both_segments_at_each_end(void)
@@ -216,7 +216,7 @@ void test_two_nulls_two_segments_both_segments_at_each_end(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 2);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 1);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 1);
 }
 
 void test_two_segments_both_segments_in_between(void)
@@ -240,7 +240,7 @@ void test_two_segments_both_segments_in_between(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 6);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 4);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 4);
 }
 
 void test_char_0xff_in_between(void)
@@ -264,7 +264,7 @@ void test_char_0xff_in_between(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 9);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 6);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 6);
 }
 
 void test_offset_of_longest_segment(void)
@@ -296,8 +296,8 @@ void test_offset_of_longest_segment(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 11);
     CU_ASSERT_EQUAL(stats.total_null_segments, 4);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 5);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 30);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 5);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 30);
 }
 
 void test_offset_of_last_longest_segment(void)
@@ -335,8 +335,8 @@ void test_offset_of_last_longest_segment(void)
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, 20);
     CU_ASSERT_EQUAL(stats.total_null_segments, 6);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 6);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 60);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 6);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 60);
 }
 
 void test_3GB_file_all_zeroes() {
@@ -350,8 +350,8 @@ void test_3GB_file_all_zeroes() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, (unsigned)3 * 1024 * 1024 * 1024);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, (unsigned)3 * 1024 * 1024 * 1024);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 0);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, (unsigned)3 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_3GB_file_two_segments() {
@@ -367,8 +367,8 @@ void test_3GB_file_two_segments() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned)3 * 1024 * 1024 * 1024) - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, ((unsigned)3 * 1024 * 1024 * 1024) - 100);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 100);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, ((unsigned)3 * 1024 * 1024 * 1024) - 100);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 100);
 }
 
 void test_4GB_file_all_zeroes() {
@@ -382,8 +382,8 @@ void test_4GB_file_all_zeroes() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, (unsigned long)4 * 1024 * 1024 * 1024);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, (unsigned long)4 * 1024 * 1024 * 1024);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 0);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, (unsigned long)4 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_4GB_file_two_segments() {
@@ -400,8 +400,8 @@ void test_4GB_file_two_segments() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned long)4 * 1024 * 1024 * 1024) - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, ((unsigned long)4 * 1024 * 1024 * 1024) - 200);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 200);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, ((unsigned long)4 * 1024 * 1024 * 1024) - 200);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 200);
 }
 
 void test_4GB_file_nine_segments() {
@@ -445,8 +445,8 @@ void test_4GB_file_nine_segments() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, (10 + 20 + 20 + 30 + 30 + 30 + 20 + 20 + 10));
     CU_ASSERT_EQUAL(stats.total_null_segments, 9);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, 30);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, GB_1_50);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, 30);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, GB_1_50);
 }
 
 void test_6GB_file_all_zeroes() {
@@ -460,8 +460,8 @@ void test_6GB_file_all_zeroes() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, (unsigned long)6 * 1024 * 1024 * 1024);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, (unsigned long)6 * 1024 * 1024 * 1024);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 0);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, (unsigned long)6 * 1024 * 1024 * 1024);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_6GB_file_two_segments() {
@@ -478,8 +478,8 @@ void test_6GB_file_two_segments() {
     CU_ASSERT(status == NH_SUCCESS);
     CU_ASSERT_EQUAL(stats.total_null_count, ((unsigned long)6 * 1024 * 1024 * 1024) - 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
-    CU_ASSERT_EQUAL(stats.longest_segment_size, ((unsigned long)6 * 1024 * 1024 * 1024) - 500);
-    CU_ASSERT_EQUAL(stats.longest_last_segment_offset, 500);
+    CU_ASSERT_EQUAL(stats.longest_null_segment_size, ((unsigned long)6 * 1024 * 1024 * 1024) - 500);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 500);
 }
 
 int init_3GB_test_file(FILE* fp, char init_char) {

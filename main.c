@@ -22,12 +22,12 @@ int main(int argc, char **argv) {
     }
 
     float total_null_percentage =  (float)(null_stats.total_null_count * 100)/ null_stats.file_size;
-    float longest_segment_percentage =  (float)(null_stats.longest_segment_size * 100)/ null_stats.file_size;
+    float longest_segment_percentage =  (float)(null_stats.longest_null_segment_size * 100)/ null_stats.file_size;
     printf("File size = %lu\n", null_stats.file_size);
     printf("Total NULL count = %lu (%.2f%%)\n", null_stats.total_null_count,total_null_percentage);
     printf("Total NULL segments = %lu\n", null_stats.total_null_segments);
-    printf("Longest segment size = %lu (%.2f%%)\n", null_stats.longest_segment_size, longest_segment_percentage);
-    printf("Offset of the (last) longest segment = %lu\n", null_stats.longest_last_segment_offset);
+    printf("Longest segment size = %lu (%.2f%%)\n", null_stats.longest_null_segment_size, longest_segment_percentage);
+    printf("Offset of the (last) longest segment = %lu\n", null_stats.longest_last_null_segment_offset);
 
 
     return status;
