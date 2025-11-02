@@ -119,6 +119,7 @@ void test_one_null_file_size_one(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 1);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 1);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_nulls_in_the_beginning(void)
@@ -140,6 +141,7 @@ void test_nulls_in_the_beginning(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 3);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 3);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_nulls_in_the_end(void)
@@ -148,7 +150,7 @@ void test_nulls_in_the_end(void)
     FILE *fp = tmpfile();
     NH_STATUS status = NH_SUCCESS;
 
-    fputs("ABCD", fp);
+    fputs("0123456789", fp);
     fwrite("\0\0\0\0", 4, 1, fp);
     fseek(fp, SEEK_SET, 0);
 
@@ -160,7 +162,9 @@ void test_nulls_in_the_end(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 4);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 4);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 10);
 }
+
 void test_five_null_one_segment_only_in_file(void)
 {
     NULL_STATS stats = {0};
@@ -178,6 +182,7 @@ void test_five_null_one_segment_only_in_file(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 5);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 5);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_five_null_one_segment_followed_by_one_nonnull(void)
@@ -198,6 +203,7 @@ void test_five_null_one_segment_followed_by_one_nonnull(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 5);
     CU_ASSERT_EQUAL(stats.total_null_segments, 1);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 5);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 0);
 }
 
 void test_two_nulls_two_segments_both_segments_at_each_end(void)
@@ -220,6 +226,7 @@ void test_two_nulls_two_segments_both_segments_at_each_end(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 2);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 1);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 2);
 }
 
 void test_two_segments_both_segments_in_between(void)
@@ -228,11 +235,11 @@ void test_two_segments_both_segments_in_between(void)
     FILE *fp = tmpfile();
     NH_STATUS status = NH_SUCCESS;
 
-    fputc('A', fp);
+    fputs("ABC", fp);
     fwrite("\0\0", 2, 1, fp);
-    fputc('B', fp);
+    fputs("DEFG", fp);
     fwrite("\0\0\0\0", 4, 1, fp);
-    fputc('C', fp);
+    fputs("HIJKL", fp);
 
     fseek(fp, SEEK_SET, 0);
 
@@ -244,6 +251,7 @@ void test_two_segments_both_segments_in_between(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 6);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 4);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 9);
 }
 
 void test_char_0xff_in_between(void)
@@ -268,6 +276,7 @@ void test_char_0xff_in_between(void)
     CU_ASSERT_EQUAL(stats.total_null_count, 9);
     CU_ASSERT_EQUAL(stats.total_null_segments, 2);
     CU_ASSERT_EQUAL(stats.longest_null_segment_size, 6);
+    CU_ASSERT_EQUAL(stats.longest_last_null_segment_offset, 5);
 }
 
 void test_offset_of_longest_segment_within_many(void)
