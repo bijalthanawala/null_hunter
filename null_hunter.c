@@ -42,7 +42,8 @@ NH_STATUS null_hunter(FILE* fp, P_NULL_STATS p_null_stats) {
             current_offset++;
         }
 
-        if(this_segment_size >= longest_segment_size) {
+        if(this_segment_size &&
+           (this_segment_size >= longest_segment_size)) {
             longest_last_segment_offset = current_offset-this_segment_size-1;
             longest_segment_size = this_segment_size;
         }

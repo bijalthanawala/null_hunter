@@ -27,8 +27,9 @@ int main(int argc, char **argv) {
     printf("Total NULL count = %lu (%.2f%%)\n", null_stats.total_null_count,total_null_percentage);
     printf("Total NULL segments = %lu\n", null_stats.total_null_segments);
     printf("Longest segment size = %lu (%.2f%%)\n", null_stats.longest_null_segment_size, longest_segment_percentage);
-    printf("Offset of the (last) longest segment = %lu\n", null_stats.longest_last_null_segment_offset);
-
+    if(null_stats.longest_null_segment_size > 0) {
+        printf("Offset of the (last) longest segment = %lu\n", null_stats.longest_last_null_segment_offset);
+    }
 
     return status;
 }
