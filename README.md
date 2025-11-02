@@ -20,7 +20,8 @@ Total NULL count = 29889 (46.59%)
 Total NULL segments = 4755
 Longest segment size = 3915 (6.10%)
 Offset of the (last) longest segment = 12469
-
+File ends with a NULL segment: True
+Length of the NULL segment at the end of the file: 15
 ```
 
 ## Unit testing
